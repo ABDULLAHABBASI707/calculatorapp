@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 void main() {
   runApp(const CalculatorApp());
@@ -31,6 +32,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String _value = "";
+  bool _complete = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,6 +97,9 @@ class _HomePageState extends State<HomePage> {
                       child: OutlinedButton(
                         onPressed: () {
                           setState(() {
+                            if (_complete) {
+                              _complete = false;
+                            }
                             _value += "/";
                           });
                         },
@@ -120,6 +125,9 @@ class _HomePageState extends State<HomePage> {
                       child: OutlinedButton(
                         onPressed: () {
                           setState(() {
+                            if (_complete) {
+                              _complete = false;
+                            }
                             _value += "*";
                           });
                         },
@@ -145,7 +153,8 @@ class _HomePageState extends State<HomePage> {
                       child: OutlinedButton(
                         onPressed: () {
                           setState(() {
-                            _value = _value.substring(0, _value.length - 1);
+                            if (!_value.isEmpty)
+                              _value = _value.substring(0, _value.length - 1);
                           });
                         },
                         style: OutlinedButton.styleFrom(
@@ -172,6 +181,10 @@ class _HomePageState extends State<HomePage> {
                       child: OutlinedButton(
                         onPressed: () {
                           setState(() {
+                            if (_complete) {
+                              _complete = false;
+                              _value = "";
+                            }
                             _value += "7";
                           });
                         },
@@ -197,6 +210,10 @@ class _HomePageState extends State<HomePage> {
                       child: OutlinedButton(
                         onPressed: () {
                           setState(() {
+                            if (_complete) {
+                              _complete = false;
+                              _value = "";
+                            }
                             _value += "8";
                           });
                         },
@@ -222,6 +239,10 @@ class _HomePageState extends State<HomePage> {
                       child: OutlinedButton(
                         onPressed: () {
                           setState(() {
+                            if (_complete) {
+                              _complete = false;
+                              _value = "";
+                            }
                             _value += "9";
                           });
                         },
@@ -247,6 +268,9 @@ class _HomePageState extends State<HomePage> {
                       child: OutlinedButton(
                         onPressed: () {
                           setState(() {
+                            if (_complete) {
+                              _complete = false;
+                            }
                             _value += "-";
                           });
                         },
@@ -274,6 +298,10 @@ class _HomePageState extends State<HomePage> {
                         child: OutlinedButton(
                           onPressed: () {
                             setState(() {
+                              if (_complete) {
+                                _complete = false;
+                                _value = "";
+                              }
                               _value += "4";
                             });
                           },
@@ -298,6 +326,10 @@ class _HomePageState extends State<HomePage> {
                       child: OutlinedButton(
                         onPressed: () {
                           setState(() {
+                            if (_complete) {
+                              _complete = false;
+                              _value = "";
+                            }
                             _value += "5";
                           });
                         },
@@ -323,6 +355,10 @@ class _HomePageState extends State<HomePage> {
                       child: OutlinedButton(
                         onPressed: () {
                           setState(() {
+                            if (_complete) {
+                              _complete = false;
+                              _value = "";
+                            }
                             _value += "6";
                           });
                         },
@@ -349,6 +385,10 @@ class _HomePageState extends State<HomePage> {
                       child: OutlinedButton(
                         onPressed: () {
                           setState(() {
+                            if (_complete) {
+                              _complete = false;
+                              _value = "";
+                            }
                             _value = "$_value+";
                           });
                         },
@@ -376,6 +416,10 @@ class _HomePageState extends State<HomePage> {
                         child: OutlinedButton(
                           onPressed: () {
                             setState(() {
+                              if (_complete) {
+                                _complete = false;
+                                _value = "";
+                              }
                               _value += "1";
                             });
                           },
@@ -400,6 +444,10 @@ class _HomePageState extends State<HomePage> {
                       child: OutlinedButton(
                         onPressed: () {
                           setState(() {
+                            if (_complete) {
+                              _complete = false;
+                              _value = "";
+                            }
                             _value += "2";
                           });
                         },
@@ -425,6 +473,10 @@ class _HomePageState extends State<HomePage> {
                       child: OutlinedButton(
                         onPressed: () {
                           setState(() {
+                            if (_complete) {
+                              _complete = false;
+                              _value = "";
+                            }
                             _value += "3";
                           });
                         },
@@ -450,7 +502,21 @@ class _HomePageState extends State<HomePage> {
                       child: OutlinedButton(
                         onPressed: () {
                           setState(() {
-                            _value += "=";
+                            _complete = true;
+                            try {
+                              Parser p = Parser();
+                              Expression exp = p.parse(_value);
+                              ContextModel cm = ContextModel();
+                              double ans =
+                                  exp.evaluate(EvaluationType.REAL, cm);
+                              _value = ans.toString();
+                            } on Exception catch (_) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text("Invalid Expression"),
+                                duration: Duration(milliseconds: 2750),
+                              ));
+                            }
                           });
                         },
                         style: OutlinedButton.styleFrom(
@@ -479,6 +545,10 @@ class _HomePageState extends State<HomePage> {
                       child: OutlinedButton(
                         onPressed: () {
                           setState(() {
+                            if (_complete) {
+                              _complete = false;
+                              _value = "";
+                            }
                             _value += "0";
                           });
                         },
@@ -504,6 +574,10 @@ class _HomePageState extends State<HomePage> {
                       child: OutlinedButton(
                         onPressed: () {
                           setState(() {
+                            if (_complete) {
+                              _complete = false;
+                              _value = "";
+                            }
                             _value += ".";
                           });
                         },
@@ -529,6 +603,10 @@ class _HomePageState extends State<HomePage> {
                       child: OutlinedButton(
                         onPressed: () {
                           setState(() {
+                            if (_complete) {
+                              _complete = false;
+                              _value = "";
+                            }
                             _value += "00";
                           });
                         },
@@ -553,6 +631,9 @@ class _HomePageState extends State<HomePage> {
                       child: OutlinedButton(
                         onPressed: () {
                           setState(() {
+                            if (_complete) {
+                              _complete = false;
+                            }
                             _value += "%";
                           });
                         },
